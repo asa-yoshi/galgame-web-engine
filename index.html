@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#1c1319">
-  <title>Galgame Web Engine Demo</title>
-  <link rel="stylesheet" href="css/game.css?v=oss">
+  <title>LUNA CLUB</title>
+  <link rel="stylesheet" href="css/game.css?v=luna1">
 </head>
 <body>
   <div id="app">
@@ -18,22 +18,22 @@
     <section id="titleScreen" class="screen active">
       <div class="titleShade"></div>
       <div class="titlePanel glass">
-        <div class="eyebrow">GALGAME WEB ENGINE</div>
-        <h1>Visual Novel Starter<br><small>Four Routes Demo</small></h1>
-        <div class="subtitle">Zero-build browser visual novel starter · JSON routes · sprites · save/load · gallery.</div>
+        <div class="eyebrow">LUNA CLUB</div>
+        <h1>LUNA CLUB<br><small>月明かりのラウンジ</small></h1>
+        <div class="subtitle">ルナと過ごす、特別なひととき。</div>
         <div class="menuGrid">
-          <button id="newGameBtn" class="menu primary">Start / 开始</button>
-          <button id="continueBtn" class="menu">Continue / 继续</button>
-          <button id="chapterBtn" class="menu">Chapters / 章节</button>
-          <button id="galleryBtn" class="menu">Gallery / CG</button>
-          <button id="endingsBtn" class="menu">Endings / 结局</button>
-          <button id="charactersBtn" class="menu">Characters / 人物</button>
-          <button id="achievementsBtn" class="menu">Achievements / 成就</button>
-          <button id="musicBtn" class="menu">Music / 音乐</button>
-          <button id="routeBtn" class="menu">Routes / 路线</button>
-          <button id="settingsBtnTitle" class="menu">Settings / 设定</button>
+          <button id="newGameBtn" class="menu primary">はじめる</button>
+          <button id="continueBtn" class="menu">つづきから</button>
+          <button id="chapterBtn" class="menu">章選択</button>
+          <button id="galleryBtn" class="menu">ギャラリー</button>
+          <button id="endingsBtn" class="menu">エンディング</button>
+          <button id="charactersBtn" class="menu">キャラクター</button>
+          <button id="achievementsBtn" class="menu">実績</button>
+          <button id="musicBtn" class="menu">音楽</button>
+          <button id="routeBtn" class="menu">好感度</button>
+          <button id="settingsBtnTitle" class="menu">設定</button>
         </div>
-        <div id="progressLine" class="version">v1.2.3-oss · OPEN SOURCE STARTER</div>
+        <div id="progressLine" class="version">LUNA CLUB v1.0</div>
       </div>
     </section>
 
@@ -41,23 +41,23 @@
       <div id="topbar">
         <div id="chapterMini"></div>
         <div class="topActions">
-          <button id="autoBtn" class="chip">AUTO</button>
-          <button id="skipBtn" class="chip">SKIP</button>
+          <button id="autoBtn" class="chip">自動</button>
+          <button id="skipBtn" class="chip">スキップ</button>
           <button id="rollbackBtn" class="chip">↶</button>
-          <button id="historyBtn" class="chip">History / 记录</button>
-          <button id="relationshipBtn" class="chip">Routes / 关系</button>
-          <button id="saveBtn" class="chip">Save / 保存</button>
-          <button id="loadBtn" class="chip">Load / 读取</button>
-          <button id="settingsBtnGame" class="chip">Settings / 设定</button>
-          <button id="titleBtn" class="chip">Title / 标题</button>
+          <button id="historyBtn" class="chip">履歴</button>
+          <button id="relationshipBtn" class="chip">好感度</button>
+          <button id="saveBtn" class="chip">保存</button>
+          <button id="loadBtn" class="chip">読込</button>
+          <button id="settingsBtnGame" class="chip">設定</button>
+          <button id="titleBtn" class="chip">タイトル</button>
         </div>
       </div>
 
       <div id="stats" class="glass compact fourHeartsStats" title="Route variables">
-        <span>林夏 <b id="affectionValue">0</b></span>
-        <span>苏晴 <b id="suqingValue">0</b></span>
-        <span>艾米 <b id="amyValue">0</b></span>
-        <span>顾宁 <b id="guningValue">0</b></span>
+        <span>ルナ <b id="affectionValue">0</b></span>
+        <span> <b id="suqingValue">0</b></span>
+        <span> <b id="amyValue">0</b></span>
+        <span> <b id="guningValue">0</b></span>
       </div>
 
       <div id="npcCard" class="npcCard glass hidden">
@@ -66,7 +66,7 @@
       </div>
 
       <div id="phoneCard" class="glass hidden">
-        <div class="phoneHead">Message / 消息</div>
+        <div class="phoneHead">メッセージ</div>
         <div id="phoneFrom" class="phoneFrom"></div>
         <div id="phoneText" class="phoneText"></div>
       </div>
@@ -85,7 +85,7 @@
       <div id="cgView" class="hidden">
         <img id="cgImage" alt="CG">
         <div id="cgCaption"></div>
-        <div class="cgHint">Click to continue / 点击继续</div>
+        <div class="cgHint">クリックして進む</div>
       </div>
 
       <div id="endingCard" class="hidden">
@@ -96,8 +96,8 @@
           <div id="endingReason" class="endingReason hidden"></div>
           <div id="endingMeta" class="endingMeta"></div>
           <div class="endingActions">
-            <button id="endingTitleBtn" class="menu primary">Back to title / 返回标题</button>
-            <button id="endingReplayBtn" class="menu">Retry last choice / 重试选择</button>
+            <button id="endingTitleBtn" class="menu primary">タイトルへ</button>
+            <button id="endingReplayBtn" class="menu">選択肢に戻る</button>
           </div>
         </div>
       </div>
@@ -126,6 +126,6 @@
     <div id="flashLayer"></div>
     <div id="toast"></div>
   </div>
-  <script src="js/engine.js?v=oss"></script>
+  <script src="js/engine.js?v=luna1"></script>
 </body>
 </html>

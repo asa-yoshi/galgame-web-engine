@@ -55,7 +55,7 @@ async function boot(){
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     story=await r.json();nodes=story.nodes;
     setBg(ASSETS.title,{});refreshContinue();
-    if($("progressLine"))$("progressLine").textContent=`v1.2.3-oss · ${seen.size}/${Object.keys(nodes).length} nodes · ${unlocks.endings.length}/${getEndingNodes().length} endings`;
+    if($("progressLine"))$("progressLine").textContent=`LUNA CLUB · 既読 ${seen.size}/${Object.keys(nodes).length} · エンディング ${unlocks.endings.length}/${getEndingNodes().length}`;
   }catch(e){
     document.body.innerHTML=`<pre style="color:white;padding:24px">无法载入 story/story.json\n${escapeHtml(e.message)}\n\n请用 start.sh 启动，不要直接双击 index.html。</pre>`;
   }

@@ -141,7 +141,7 @@ function renderChoices(items){
 
 function finishScene(node){
   if(node.choice){if(skipMode)toggleSkip(false);renderChoices(node.choice);hint.textContent="选择你的回答";return}
-  hint.textContent=node.next?(skipMode?"SKIP · 已读":"点击继续  ·  Enter / Space"):"";
+  hint.textContent=node.next?(skipMode?"SKIP · 已读":"クリックして進む  ·  Enter / Space"):"";
   if(skipMode&&node.next){clearTimeout(autoTimer);autoTimer=setTimeout(()=>advance(),85);return}
   if(autoMode&&node.next){clearTimeout(autoTimer);autoTimer=setTimeout(()=>advance(),900+Math.min(1400,(node.text||"").length*25))}
 }
@@ -174,9 +174,9 @@ function showCG(node){
 function showEnding(node){
   busy=true;if(npcCard)npcCard.classList.add("hidden");stopTyping();toggleSkip(false);dialogueWrap.classList.add("hidden");endingTitle.textContent=node.title;endingSub.textContent=node.subtitle||"";
   const er=$("endingReason");
-  if(er){er.textContent=node.reason?`为什么会到这里：${node.reason}`:"";er.classList.toggle("hidden",!node.reason)}
+  if(er){er.textContent=node.reason?`理由：${node.reason}`:"";er.classList.toggle("hidden",!node.reason)}
   const em=$("endingMeta");
-  if(em)em.innerHTML=`<span>${escapeHtml(node.route||"路线结局")}</span><span>林夏 ${vars.lx||vars.affection||0}</span><span>苏晴 ${vars.sq||0}</span><span>艾米 ${vars.amy||0}</span><span>顾宁 ${vars.gn||0}</span><span>诚实 ${vars.honesty||0}</span>`;
+  if(em)em.textContent=`ルナの好感度：${vars.lx||0}`;
   endingCard.classList.remove("hidden");
   if(node.unlock){const was=unlocks.endings.includes(node.unlock);unlock("ending",node.unlock);if(!was){runtimeStats.clears=(runtimeStats.clears||0)+1;persistStats()}}
   saveGame("auto",true);

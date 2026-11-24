@@ -107,7 +107,7 @@ function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({"&":"&amp;","<":
 function openGallery(){
   const base=[
     {type:"free",id:"title",label:"Starter visual",src:SAMPLE_ART.title},
-    {type:"free",id:"fourhearts",label:"Four Hearts demo",src:SAMPLE_ART.fourHearts}
+    {type:"free",id:"fourhearts",label:"ルナ",src:SAMPLE_ART.fourHearts}
   ];
   const cgMap=new Map();
   for(const [id,node] of Object.entries(nodes||{})){
@@ -117,42 +117,30 @@ function openGallery(){
     }
   }
   const items=[...base,...cgMap.values()];
-  const html=`<div class="routeSummary"><b>CG ${unlocks.cg.length}/${cgMap.size}</b><span>完整版回想</span></div><div class="galleryGrid">${items.map(x=>{
+  const html=`<div class="routeSummary"><b>CG ${unlocks.cg.length}/${cgMap.size}</b><span>イベント画像</span></div><div class="galleryGrid">${items.map(x=>{
     const ok=x.type==="free"||unlocks.cg.includes(x.id);
-    return `<div class="galleryItem ${ok?"":"locked"}">${x.src&&ok?`<img src="${x.src}" alt="">`:"<div>🔒</div>"}<div class="galleryLabel">${ok?escapeHtml(x.label):"未解锁"}</div></div>`
+    return `<div class="galleryItem ${ok?"":"locked"}">${x.src&&ok?`<img src="${x.src}" alt="">`:"<div>🔒</div>"}<div class="galleryLabel">${ok?escapeHtml(x.label):"未解放"}</div></div>`
   }).join("")}</div>`;
-  openModal("CG 回想",html);
+  openModal("ギャラリー",html);
 }
 
-function openRouteMap(){
-  const hearts=[
-    ["林夏","lx","v11_lx_chapter","雨夜之后最深的旧故事"],
-    ["苏晴","sq","v11_sq_chapter","友情、保护与越界"],
-    ["艾米","amy","v11_amy_chapter","没有过去的新开始"],
-    ["顾宁","gn","v11_gn_chapter","职业、距离与边界"]
-  ];
-  const rows=hearts.map(([name,key,id,desc])=>`<div class="heartRow"><div><b>${name}</b><small>${desc}</small></div><div class="heartMeter"><i style="width:${Math.min(100,(vars[key]||0)*8)}%"></i></div><strong>${vars[key]||0}</strong></div>`).join("");
-  const crosses=[
-    ["林夏 × 苏晴","v11_ls_triangle_chapter"],["艾米 × 顾宁","v11_ag_triangle_chapter"],["林夏 × 艾米","v11_la_triangle_chapter"],["苏晴 × 顾宁","v11_sg_triangle_chapter"],["四重隐藏线","v11_four_chapter"]
-  ].map(([n,id])=>`<span class="routeBadge">${seen.has(id)?"✓":"?"} ${n}</span>`).join("");
-  openModal("四线关系",`<div class="relationshipPanel">${rows}</div><div class="relationshipMeta"><span>诚实 <b>${vars.honesty||0}</b></span><span>隐瞒 <b>${vars.secrecy||0}</b></span><span>张力 <b>${vars.tension||0}</b></span></div><div class="crossRoutes">${crosses}</div><div class="routeTip">这不是“好感度最高就赢”的系统。诚实、隐瞒、交叉选择和二周目状态会改变可进入的关系结构。</div>`);
-}
+function openRouteMap(){openModal('ルナの好感度',`<div class="heartRow"><b>ルナ</b><div class="heartMeter"><i style="width:${Math.min(100,(vars.lx||0)*25)}%"></i></div><strong>${vars.lx||0}</strong></div>`);}
 
 function openSettings(){
   const html=`
     <div class="settingsRow"><div>文字速度</div><input id="speedRange" type="range" min="8" max="60" value="${settings.textSpeed}"><div id="speedVal">${settings.textSpeed}</div></div>
-    <div class="settingsRow"><div>环境雨声</div><input id="rainRange" type="range" min="0" max="40" value="${Math.round(settings.rainVolume*100)}"><div id="rainVal">${Math.round(settings.rainVolume*100)}</div></div>
+    <div class="settingsRow"><div>雨音</div><input id="rainRange" type="range" min="0" max="40" value="${Math.round(settings.rainVolume*100)}"><div id="rainVal">${Math.round(settings.rainVolume*100)}</div></div>
     <div class="settingsRow"><div>BGM</div><input id="bgmRange" type="range" min="0" max="60" value="${Math.round(settings.bgmVolume*100)}"><div id="bgmVal">${Math.round(settings.bgmVolume*100)}</div></div>
-    <div class="settingsRow"><div>音效</div><input id="sfxRange" type="range" min="0" max="100" value="${Math.round(settings.sfxVolume*100)}"><div id="sfxVal">${Math.round(settings.sfxVolume*100)}</div></div>
-    <button id="resetProgress" class="menu">清除全部存档与解锁</button>`;
-  openModal("设定",html);
+    <div class="settingsRow"><div>効果音</div><input id="sfxRange" type="range" min="0" max="100" value="${Math.round(settings.sfxVolume*100)}"><div id="sfxVal">${Math.round(settings.sfxVolume*100)}</div></div>
+    <button id="resetProgress" class="menu">全セーブデータを削除</button>`;
+  openModal("設定",html);
   const speed=$("speedRange"),rain=$("rainRange"),bgm=$("bgmRange"),sfx=$("sfxRange");
   const persist=()=>localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
   speed.oninput=()=>{$("speedVal").textContent=speed.value;settings.textSpeed=Number(speed.value);persist()};
   rain.oninput=()=>{$("rainVal").textContent=rain.value;settings.rainVolume=Number(rain.value)/100;persist();ensureAudio();updateRainGain()};
   bgm.oninput=()=>{$("bgmVal").textContent=bgm.value;settings.bgmVolume=Number(bgm.value)/100;persist();ensureAudio();if(bgmPlayer)bgmPlayer.volume=settings.bgmVolume};
   sfx.oninput=()=>{$("sfxVal").textContent=sfx.value;settings.sfxVolume=Number(sfx.value)/100;persist();ensureAudio()};
-  $("resetProgress").onclick=()=>{if(confirm("清除全部存档、CG 和结局解锁？")){localStorage.removeItem(SAVE_KEY);localStorage.removeItem(UNLOCK_KEY);localStorage.removeItem(SEEN_KEY);localStorage.removeItem(STATS_KEY);seen=new Set();unlocks={cg:[],endings:[]};runtimeStats={choices:0,rollbacks:0,starts:0,clears:0};refreshContinue();showToast("已清除");closeModal()}};
+  $("resetProgress").onclick=()=>{if(confirm("保存データと解放状況を削除しますか？")){localStorage.removeItem(SAVE_KEY);localStorage.removeItem(UNLOCK_KEY);localStorage.removeItem(SEEN_KEY);localStorage.removeItem(STATS_KEY);seen=new Set();unlocks={cg:[],endings:[]};runtimeStats={choices:0,rollbacks:0,starts:0,clears:0};refreshContinue();showToast("削除しました");closeModal()}};
 }
 
 function openSaveLoad(mode){
@@ -177,17 +165,17 @@ function toggleSkip(force){
   if(skipMode)autoMode=false;
   $("autoBtn").classList.toggle("active",autoMode);
   clearTimeout(autoTimer);
-  if(before!==skipMode)showToast(skipMode?"跳过已读 开":"跳过已读 关");
+  if(before!==skipMode)showToast(skipMode?"既読スキップ ON":"既読スキップ OFF");
   if(skipMode&&!typing){const node=nodes[current];if(node?.next&&!node.choice&&seen.has(current))autoTimer=setTimeout(()=>advance(),70)}
 }
 
 function rollback(){
-  if(busy||!stateStack.length){showToast("没有更早的画面");return}
+  if(busy||!stateStack.length){showToast("これ以上戻れません");return}
   runtimeStats.rollbacks=(runtimeStats.rollbacks||0)+1;persistStats();
   const s=stateStack.pop();
   stopTyping();clearTimeout(autoTimer);autoMode=false;skipMode=false;
   $("autoBtn").classList.remove("active");$("skipBtn").classList.remove("active");
-  restoreState(s);go(current,false,true);showToast("回退一幕");
+  restoreState(s);go(current,false,true);showToast("一つ前に戻りました");
 }
 
 function triggerFlash(){
@@ -210,14 +198,14 @@ function getEndingNodes(){return Object.entries(nodes||{}).filter(([,n])=>n.type
 
 function openEndings(){
   const ends=getEndingNodes();
-  const html=`<div class="statsPanel"><div><b>${unlocks.endings.length}/${ends.length}</b><small>结局</small></div><div><b>${seen.size}</b><small>已读节点</small></div><div><b>${runtimeStats.choices||0}</b><small>选择次数</small></div></div><div class="endingGrid">${ends.map(([id,n])=>{const ok=unlocks.endings.includes(n.unlock);return `<div class="endingTile ${ok?"done":"locked"}"><b>${ok?escapeHtml(n.title):"？？？"}</b><small>${ok?escapeHtml(n.route||"已解锁"):"尚未抵达"}</small></div>`}).join("")}</div>`;
-  openModal("结局一览",html);
+  const html=`<div class="statsPanel"><div><b>${unlocks.endings.length}/${ends.length}</b><small>エンディング</small></div><div><b>${seen.size}</b><small>既読</small></div><div><b>${runtimeStats.choices||0}</b><small>選択回数</small></div></div><div class="endingGrid">${ends.map(([id,n])=>{const ok=unlocks.endings.includes(n.unlock);return `<div class="endingTile ${ok?"done":"locked"}"><b>${ok?escapeHtml(n.title):"？？？"}</b><small>${ok?escapeHtml(n.route||"解放済み"):"未到達"}</small></div>`}).join("")}</div>`;
+  openModal("エンディング一覧",html);
 }
 
 function openCharacters(){
   const chars=story.meta.characters||[];
-  const html=`<div class="profileGrid">${chars.map(c=>{const ok=!c.unlockSeen||seen.has(c.unlockSeen)||c.id==="linxia";return `<div class="profileCard ${ok?"":"locked"}">${ok?`<img src="${PORTRAITS[c.id]?.src||c.portrait||""}" alt="">`:""}<h3>${ok?escapeHtml(c.name):"？？？"}</h3><p>${ok?escapeHtml(c.bio):"继续游戏解锁人物资料。"}</p></div>`}).join("")}</div>`;
-  openModal("人物资料",html);
+  const html=`<div class="profileGrid">${chars.map(c=>{const ok=!c.unlockSeen||seen.has(c.unlockSeen)||c.id==="linxia";return `<div class="profileCard ${ok?"":"locked"}">${ok?`<img src="${PORTRAITS[c.id]?.src||c.portrait||""}" alt="">`:""}<h3>${ok?escapeHtml(c.name):"？？？"}</h3><p>${ok?escapeHtml(c.bio):"继续游戏解锁キャラクター。"}</p></div>`}).join("")}</div>`;
+  openModal("キャラクター",html);
 }
 
 function achievementState(a){
@@ -233,11 +221,11 @@ function achievementState(a){
 function openAchievements(){
   const list=story.meta.achievements||[];
   const done=list.filter(achievementState).length;
-  openModal("成就",`<div class="routeSummary"><b>${done}/${list.length}</b><span>完成</span></div><div class="achievementGrid">${list.map(a=>{const ok=achievementState(a);return `<div class="achievement ${ok?"done":""}"><div class="icon">${ok?"◆":"◇"}</div><b>${escapeHtml(a.name)}</b><small>${escapeHtml(ok?a.desc:(a.hidden?"隐藏成就":"尚未完成"))}</small></div>`}).join("")}</div>`);
+  openModal("実績",`<div class="routeSummary"><b>${done}/${list.length}</b><span>達成</span></div><div class="achievementGrid">${list.map(a=>{const ok=achievementState(a);return `<div class="achievement ${ok?"done":""}"><div class="icon">${ok?"◆":"◇"}</div><b>${escapeHtml(a.name)}</b><small>${escapeHtml(ok?a.desc:(a.hidden?"隐藏実績":"尚未達成"))}</small></div>`}).join("")}</div>`);
 }
 
 function startChapter(ch){
-  if(ch.unlockSeen&&!seen.has(ch.unlockSeen)&&!unlocks.endings.length){showToast("该章节尚未解锁");return}
+  if(ch.unlockSeen&&!seen.has(ch.unlockSeen)&&!unlocks.endings.length){showToast("该章节尚未解放");return}
   closeModal();current=null;history=[];lastChoiceCheckpoint=null;stateStack=[];
   vars={affection:0,courage:0,tease:0,direct:0,guarded:0,trust:0,career:0,suqing:0,honesty:0,memory:0,ngplus:unlocks.endings.length?1:0,lx:0,sq:0,amy:0,gn:0,tension:0,secrecy:0,route_lx:0,route_sq:0,route_amy:0,route_gn:0,route_chaos:0,route_four:0,...(ch.preset||{})};
   refreshStats();showGame();ensureAudio();go(ch.start,true,true);

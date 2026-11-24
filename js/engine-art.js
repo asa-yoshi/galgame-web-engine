@@ -1,9 +1,9 @@
-const SAVE_KEY = "galgame_web_engine_oss_save";
-const SETTINGS_KEY = "galgame_web_engine_oss_settings";
-const UNLOCK_KEY = "galgame_web_engine_oss_unlocks";
+const SAVE_KEY = "luna_club_v1_save";
+const SETTINGS_KEY = "luna_club_v1_settings";
+const UNLOCK_KEY = "luna_club_v1_unlocks";
 const storyUrl = "story/story.json";
-const SEEN_KEY = "galgame_web_engine_oss_seen";
-const STATS_KEY = "galgame_web_engine_oss_stats";
+const SEEN_KEY = "luna_club_v1_seen";
+const STATS_KEY = "luna_club_v1_stats";
 
 const svgData = svg => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 
@@ -53,5 +53,10 @@ const PORTRAITS = {
 const DEFAULT_SPEAKER_SPRITES = {"林夏":"neutral","苏晴":"suqing","艾米":"amy","顾宁":"guning"};
 const HEROINE_PORTRAIT_IDS = new Set(["linxia","suqing","amy","guning"]);
 
+Object.assign(ASSETS,{title:'assets/luna-main.webp',lounge:'assets/luna-bg.webp'});
+for(const mood of ['normal','smile','blush','surprise','pout','happy']) SPRITES['luna_'+mood]='assets/luna-'+mood+'.webp';
+PORTRAITS.linxia={src:'assets/luna-normal.webp',name:'ルナ',role:'ラウンジの案内役'};
+DEFAULT_SPEAKER_SPRITES['ルナ']='luna_normal';
+SAMPLE_ART.fourHearts='assets/luna-main.webp';
 const BGM = {};
 const SFX = {};
